@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="todoapp">
+        <header class="header">
+            <h1>todo-list</h1>
+            <input class="new-todo"
+                   type="text"
+                   placeholder="What needs to be done?"
+                   value="">
+            {% csrf_token %}
+        </header>
+
+        <section class="main">
+            <ul class="todo-list">
+                {% for todo_item in todo_list %}
+                    <li class="{% if todo_item.is_completed %}completed{% endif %}">
+                        <div class="view">
+                            <div style="display: none" id="{{ todo_item.id }}"></div>
+                            <input class="toggle"
+                                   type="checkbox"
+                                   {% if todo_item.is_completed %}checked{% endif %}>
+                            <label class="todo-label">{{ todo_item.content }}</label>
+                            <button class="destroy"></button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {% if todo_list.count > 0 or todo_filter != 'all' %}
+                <footer class="footer">
+                <span class="todo-count">
+                    <strong>{{ todo_list | length }}</strong>
+                    <span> </span>
+                    <span>item</span>
+                    <span> left</span>
+                </span>
+                    <ul class="filters">
+                        <li class="show_all">
+                            <a class="{% if todo_filter == 'all' %}selected{% endif %}" style="cursor:pointer;">
+                                All
+                            </a>
+                        </li>
+                        <li class="show_active">
+                            <a class="{% if todo_filter == 'active' %}selected{% endif %}" style="cursor:pointer;">
+                                Active
+                            </a>
+                        </li>
+                        <li class="show_completed">
+                            <a class="{% if todo_filter == 'completed' %}selected{% endif %}" style="cursor:pointer;">
+                                Completed
+                            </a>
+                        </li>
+                    </ul>
+                </footer>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}
